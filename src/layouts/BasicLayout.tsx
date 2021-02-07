@@ -4,7 +4,7 @@
  * @see You can view component api by: https://github.com/ant-design/ant-design-pro-layout
  */
 import type {
-  MenuDataItem,
+  // MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
   Settings,
 } from '@ant-design/pro-layout';
@@ -12,7 +12,7 @@ import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
 import React, { useEffect, useMemo, useRef } from 'react';
 import type { Dispatch } from 'umi';
 import { Link, useIntl, connect, history } from 'umi';
-import { GithubOutlined } from '@ant-design/icons';
+// import { GithubOutlined } from '@ant-design/icons';
 import { Result, Button } from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
@@ -56,26 +56,26 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
 
 const defaultFooterDom = (
   <DefaultFooter
-    copyright={`${new Date().getFullYear()} 蚂蚁集团体验技术部出品`}
+    copyright={`${new Date().getFullYear()} 商汇`}
     links={[
-      {
-        key: 'Ant Design Pro',
-        title: 'Ant Design Pro',
-        href: 'https://pro.ant.design',
-        blankTarget: true,
-      },
-      {
-        key: 'github',
-        title: <GithubOutlined />,
-        href: 'https://github.com/ant-design/ant-design-pro',
-        blankTarget: true,
-      },
-      {
-        key: 'Ant Design',
-        title: 'Ant Design',
-        href: 'https://ant.design',
-        blankTarget: true,
-      },
+      // {
+      //   key: 'Ant Design Pro',
+      //   title: 'Ant Design Pro',
+      //   href: 'https://pro.ant.design',
+      //   blankTarget: true,
+      // },
+      // {
+      //   key: 'github',
+      //   title: <GithubOutlined />,
+      //   href: 'https://github.com/ant-design/ant-design-pro',
+      //   blankTarget: true,
+      // },
+      // {
+      //   key: 'Ant Design',
+      //   title: 'Ant Design',
+      //   href: 'https://ant.design',
+      //   blankTarget: true,
+      // },
     ]}
   />
 );
@@ -122,12 +122,21 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
   return (
     <ProLayout
-      logo={logo}
+      logo='https://gw.alipayobjects.com/mdn/rms_b5fcc5/afts/img/A*1NHAQYduQiQAAAAAAAAAAABkARQnAQ'
+      title='商汇管理'
       formatMessage={formatMessage}
       {...props}
       {...settings}
       onCollapse={handleMenuCollapse}
       onMenuHeaderClick={() => history.push('/')}
+      menuHeaderRender={(logo, title) => (
+        <div
+          id="customize_menu_header3"
+        >
+          {logo}
+          {title}
+        </div>
+      )}
       menuItemRender={(menuItemProps, defaultDom) => {
         if (
           menuItemProps.isUrl ||
@@ -153,7 +162,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
           <span>{route.breadcrumbName}</span>
         );
       }}
-      footerRender={() => defaultFooterDom}
+      // footerRender={() => defaultFooterDom}
       menuDataRender={menuDataRender}
       rightContentRender={() => <RightContent />}
       postMenuData={(menuData) => {

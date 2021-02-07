@@ -6,6 +6,9 @@ type DefaultSettings = Partial<ProSettings> & {
 
 const proSettings: DefaultSettings = {
   navTheme: 'dark',
+  menu: {
+    locale: false,  //关闭国际化
+  },
   // 拂晓蓝
   primaryColor: '#1890ff',
   layout: 'side',
@@ -13,7 +16,7 @@ const proSettings: DefaultSettings = {
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Ant Design Pro',
+  title: '商汇',
   pwa: false,
   iconfontUrl: '',
 };
