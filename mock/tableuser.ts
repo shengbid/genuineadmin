@@ -14,6 +14,9 @@ const genList = (current: number, pageSize: number) => {
     table.push({
       key: index,
       name: `张三${index}`,
+      phone: '13567898767',
+      sex: Math.floor(i % 2),
+      time: Date.now() - Math.floor(Math.random() * 100000),
       age: Math.round(Math.random() * 100),
       desc: '描述',
       status: valueEnum[Math.floor(i % 4)]

@@ -5,48 +5,29 @@ import React, { useState, useRef } from 'react';
 import type { ActionType } from '@ant-design/pro-table';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
+import { FormattedMessage } from 'umi';
 import { queryList } from './service';
+import type {
+  BasicLayoutProps as ProLayoutProps,
+} from '@ant-design/pro-layout';
+
+export type routeProps = {
+  route: ProLayoutProps['route']
+} & ProLayoutProps
 
 const columns = [{
-  title: '名称',
+  title: '姓名',
   dataIndex: 'name',
   key: 'name'
-}, {
-  title: '性别',
-  dataIndex: 'sex',
-  key: 'sex',
-  hideInForm: true,
-  valueEnum: {
-    0: {
-      text: '男'
-    },
-    1: {
-      text: '女',
-    }
-  }
 }, {
   title: '年龄',
   dataIndex: 'age',
   key: 'age',
   hideInForm: true,
 }, {
-  title: '手机',
-  dataIndex: 'phone',
-  key: 'phone',
-}, {
-  title: '微信',
-  dataIndex: 'phone',
-  hideInForm: true,
-}, {
-  title: '实名',
+  title: '描述',
   dataIndex: 'desc',
   key: 'desc',
-  hideInForm: true,
-}, {
-  title: '注册时间',
-  dataIndex: 'time',
-  key: 'time',
-  valueType: 'date',
   hideInForm: true,
 }, {
   title: '状态',
@@ -56,7 +37,7 @@ const columns = [{
   valueEnum: {
     loading: {
       text: '待处理',
-      status: 'Default'
+      status: 'Default',
     },
     running: {
       text: '处理中',
@@ -77,13 +58,10 @@ const columns = [{
   valueType: 'option',
   render: (_, item) => [
     <a key="subscribeAlert" onClick={() => {}}>
-      详情
+      编辑
     </a>,
     <a key="subscribeAlert" onClick={() => {}}>
-      {item.sex ? '冻结' : '解冻'}
-    </a>,
-    <a onClick={() => {}}>
-      广播
+      删除
     </a>,
   ]
 }]
@@ -97,22 +75,20 @@ const queryRule = async (fieds: any) => {
 }
 const TableList: React.FC<routeProps> = (props) => {
 
+  const { location = {
+    pathname: '/'
+  }} = props;
+
+  const paths = location.pathname.split('/')
+  const currentPath = paths[2] ? paths[2] : 'user'
+
+  if (currentPath === 'merchant') { // 商户管理
+    console.log(location.pathname)
+    
+  }
   const actionRef = useRef<ActionType>();
   const [visible, handleModalVisible] = useState<boolean>(false)
-  const [selectedRowKeys, handleSelectedRowKeys] = useState('')
 
-  const rowSelection = {
-    onChange(selectedRowKeys, selectedRows) {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      handleSelectedRowKeys(selectedRowKeys)
-    },
-    // onSelect(record, selected, selectedRows) {
-    //   console.log(record, selected, selectedRows);
-    // },
-    // onSelectAll(selected, selectedRows, changeRows) {
-    //   console.log(selected, selectedRows, changeRows);
-    // },
-  };
   return (
     <PageContainer>
       <ProTable
@@ -121,7 +97,6 @@ const TableList: React.FC<routeProps> = (props) => {
         search={{
           labelWidth: 120,
         }}
-        rowSelection={rowSelection}
         toolBarRender={() => [
           <Button
             type="primary"
@@ -130,17 +105,8 @@ const TableList: React.FC<routeProps> = (props) => {
               handleModalVisible(true);
             }}
           >
-            <PlusOutlined /> 新建
+            <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="新建" />
           </Button>,
-          (selectedRowKeys && <Button
-            type="primary"
-            key="primary"
-            onClick={() => {
-              handleModalVisible(true);
-            }}
-          >
-            批量广播
-          </Button>),
         ]}
         request={(params) => queryRule({ ...params })}
         columns={columns}

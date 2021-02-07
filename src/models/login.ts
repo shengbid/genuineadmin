@@ -6,8 +6,24 @@ import { fakeAccountLogin } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
+import { queryCurrent } from '@/services/user';
+
+export type CurrentUser = {
+  avatar?: string;
+  name?: string;
+  title?: string;
+  group?: string;
+  signature?: string;
+  tags?: {
+    key: string;
+    label: string;
+  }[];
+  userid?: string;
+  unreadCount?: number;
+};
 
 export type StateType = {
+  currentUser?: CurrentUser;
   status?: 'ok' | 'error';
   type?: string;
   currentAuthority?: 'user' | 'guest' | 'admin';
@@ -21,6 +37,7 @@ export type LoginModelType = {
     logout: Effect;
   };
   reducers: {
+    saveCurrentUser: Reducer<UserModelState>;
     changeLoginStatus: Reducer<StateType>;
   };
 };
@@ -44,6 +61,12 @@ const Model: LoginModelType = {
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         message.success('🎉 🎉 🎉  登录成功！');
+        const res = yield call(queryCurrent);
+        yield put({
+          type: 'saveCurrentUser',
+          payload: res,
+        });
+        localStorage.setItem('currentUser', JSON.stringify(res))
         let { redirect } = params as { redirect: string };
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
@@ -71,11 +94,18 @@ const Model: LoginModelType = {
             redirect: window.location.href,
           }),
         });
+        localStorage.removeItem('currentUser')
       }
     },
   },
 
   reducers: {
+    saveCurrentUser(state, action) {
+      return {
+        ...state,
+        currentUser: action.payload || {},
+      };
+    },
     changeLoginStatus(state, { payload }) {
       setAuthority(payload.currentAuthority);
       return {

@@ -59,7 +59,7 @@
                 path: '/list/merchant',
                 name: '商户管理',
                 icon: 'pay-circle',
-                component: './TableList/user',
+                component: './TableList/merchant',
                 authority: ['admin'],
               }, {
                 path: '/list/advice',

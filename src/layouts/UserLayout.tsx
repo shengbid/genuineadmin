@@ -12,6 +12,32 @@ export type UserLayoutProps = {
   breadcrumbNameMap: Record<string, MenuDataItem>;
 } & Partial<ConnectProps>;
 
+const defaultFooterDom = (
+  <DefaultFooter
+    copyright={`${new Date().getFullYear()} 商汇`}
+    links={[
+      // {
+      //   key: 'Ant Design Pro',
+      //   title: 'Ant Design Pro',
+      //   href: 'https://pro.ant.design',
+      //   blankTarget: true,
+      // },
+      // {
+      //   key: 'github',
+      //   title: <GithubOutlined />,
+      //   href: 'https://github.com/ant-design/ant-design-pro',
+      //   blankTarget: true,
+      // },
+      // {
+      //   key: 'Ant Design',
+      //   title: 'Ant Design',
+      //   href: 'https://ant.design',
+      //   blankTarget: true,
+      // },
+    ]}
+  />
+);
+
 const UserLayout: React.FC<UserLayoutProps> = (props) => {
   const {
     route = {
@@ -49,19 +75,19 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
             <div className={styles.header}>
               <Link to="/">
                 <img alt="logo" className={styles.logo} src={logo} />
-                <span className={styles.title}>Ant Design</span>
+                <span className={styles.title}>登陆</span>
               </Link>
             </div>
             <div className={styles.desc}>
-              <FormattedMessage
+              {/* <FormattedMessage
                 id="pages.layouts.userLayout.title"
                 defaultMessage="Ant Design 是西湖区最具影响力的 Web 设计规范"
-              />
+              /> */}
             </div>
           </div>
           {children}
         </div>
-        <DefaultFooter />
+        {defaultFooterDom}
       </div>
     </HelmetProvider>
   );

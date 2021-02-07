@@ -75,17 +75,11 @@ const Login: React.FC<LoginProps> = (props) => {
         <Tabs activeKey={type} onChange={setType}>
           <Tabs.TabPane
             key="account"
-            tab={intl.formatMessage({
-              id: 'pages.login.accountLogin.tab',
-              defaultMessage: '账户密码登录',
-            })}
+            tab='登录'
           />
           <Tabs.TabPane
             key="mobile"
-            tab={intl.formatMessage({
-              id: 'pages.login.phoneLogin.tab',
-              defaultMessage: '手机号登录',
-            })}
+            tab='注册'
           />
         </Tabs>
 
@@ -127,10 +121,7 @@ const Login: React.FC<LoginProps> = (props) => {
                 size: 'large',
                 prefix: <LockTwoTone className={styles.prefixIcon} />,
               }}
-              placeholder={intl.formatMessage({
-                id: 'pages.login.password.placeholder',
-                defaultMessage: '密码: ant.design',
-              })}
+              placeholder='密码: 1234'
               rules={[
                 {
                   required: true,
@@ -245,12 +236,12 @@ const Login: React.FC<LoginProps> = (props) => {
           </a>
         </div>
       </ProForm>
-      <Space className={styles.other}>
+      {/* <Space className={styles.other}>
         <FormattedMessage id="pages.login.loginWith" defaultMessage="其他登录方式" />
         <AlipayCircleOutlined className={styles.icon} />
         <TaobaoCircleOutlined className={styles.icon} />
         <WeiboCircleOutlined className={styles.icon} />
-      </Space>
+      </Space> */}
     </div>
   );
 };
