@@ -8,24 +8,24 @@ const valueEnum = {
   3: 'success',
 };
 const genList = (current: number, pageSize: number) => {
-  const table:any[] = []
+  const table: any[] = [];
   for (let i = 0; i < pageSize; i++) {
     const index = (current - 1) * 10 + i;
     table.push({
       key: index,
       name: `张三${index}`,
       phone: '13567898767',
+      wechart: '1356788997',
       sex: Math.floor(i % 2),
       time: Date.now() - Math.floor(Math.random() * 100000),
       age: Math.round(Math.random() * 100),
       desc: '描述',
-      status: valueEnum[Math.floor(i % 4)]
-    })
-    
+      status: valueEnum[Math.floor(i % 4)],
+    });
   }
-  table.reverse()
-  return table
-}
+  table.reverse();
+  return table;
+};
 
 let tableListDataSource = genList(1, 100);
 function getRule(req: Request, res: Response, u: string) {
@@ -53,5 +53,5 @@ function getRule(req: Request, res: Response, u: string) {
 }
 
 export default {
-  'GET /api/query/user/list': getRule
-}
+  'GET /api/query/user/list': getRule,
+};
