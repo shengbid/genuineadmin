@@ -20,7 +20,7 @@ const genList = (current: number, pageSize: number) => {
       time: Date.now() - Math.floor(Math.random() * 100000),
       age: Math.round(Math.random() * 100),
       desc: '描述',
-      status: valueEnum[Math.floor(i % 4)],
+      status: valueEnum[Math.floor(i % 2)],
     });
   }
   table.reverse();

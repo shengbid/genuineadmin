@@ -100,5 +100,10 @@
     "src/**/*.less",
     "config/**/*.js*",
     "scripts/**/*.js"
-  ]
+  ],
+  "eslintConfig": {
+    "rules": {
+      "no-console": "off"
+    }
+  }
 }

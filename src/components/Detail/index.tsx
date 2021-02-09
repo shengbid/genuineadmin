@@ -13,7 +13,7 @@ const Detail: React.FC<UpdateFormProps> = (props) => {
   return (
     <Modal
       width={840}
-      bodyStyle={{ padding: '32px 40px 48px' }}
+      bodyStyle={{ padding: '30px' }}
       destroyOnClose
       title="详情"
       visible={props.modalVisible}

@@ -6,6 +6,7 @@ import type { ActionType } from '@ant-design/pro-table';
 import { Button, Popconfirm, message } from 'antd';
 import { queryList } from './service';
 import Detail from '@/components/Detail';
+import Broadcast from '@/components/Broadcast';
 
 const queryRule = async (fieds: any) => {
   const res = await queryList({ ...fieds });
@@ -15,14 +16,23 @@ const queryRule = async (fieds: any) => {
     data: res.data,
   };
 };
+
 const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [visible, handleModalVisible] = useState<boolean>(false);
-  const [handleSelectedRowKeys] = useState('');
+  const [broadVisible, handleModalBroadVisible] = useState<boolean>(false);
+  const [rowKeys, handleSelectedRowKeys] = useState([]);
+  const [ids, handleIds] = useState<any[]>([]);
 
   const confirm = (text: string) => {
     message.success(text);
   };
+
+  const handleSubmit = (values: any) => {
+    console.log(values);
+    message.success('留言成功!');
+    handleModalBroadVisible(false);
+  }
 
   const columns = [
     {
@@ -34,7 +44,7 @@ const TableList: React.FC = () => {
       title: '性别',
       dataIndex: 'sex',
       key: 'sex',
-      hideInForm: true,
+      hideInSearch: true,
       valueEnum: {
         0: {
           text: '男',
@@ -48,7 +58,7 @@ const TableList: React.FC = () => {
       title: '年龄',
       dataIndex: 'age',
       key: 'age',
-      hideInForm: true,
+      hideInSearch: true,
     },
     {
       title: '手机',
@@ -59,34 +69,33 @@ const TableList: React.FC = () => {
       title: '微信',
       dataIndex: 'wechart',
       key: 'wechart',
-      hideInForm: true,
+      hideInSearch: true,
     },
     {
       title: '实名',
       dataIndex: 'desc',
       key: 'desc',
-      hideInForm: true,
+      hideInSearch: true,
     },
     {
       title: '注册时间',
       dataIndex: 'time',
       key: 'time',
       valueType: 'date',
-      hideInForm: true,
+      hideInSearch: true,
     },
     {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
-      initialValue: 'loading',
       valueEnum: {
         loading: {
-          text: '待处理',
-          status: 'Default',
+          text: '冻结',
+          status: 'error',
         },
         running: {
-          text: '处理中',
-          status: 'Processing',
+          text: '正常',
+          status: 'Success',
         },
         online: {
           text: '审批中',
@@ -102,7 +111,7 @@ const TableList: React.FC = () => {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
-      render: (_, item) => [
+      render: (_: any, item: any) => [
         <a
           key="subscribeAlert"
           onClick={() => {
@@ -113,23 +122,26 @@ const TableList: React.FC = () => {
         </a>,
         <Popconfirm
           placement="bottomRight"
-          title={!item.sex ? '是否确定解冻?' : '是否确定冻结?'}
+          title={item.status === 'loading' ? '是否确定解冻?' : '是否确定冻结?'}
           onConfirm={() => {
-            confirm(!item.sex ? '解冻成功!' : '冻结成功!');
+            confirm(item.status === 'loading' ? '解冻成功!' : '冻结成功!');
           }}
           okText="确定"
           cancelText="取消"
         >
-          <a>{item.sex ? '冻结' : '解冻'}</a>
+          <a>{item.status === 'running' ? '冻结' : '解冻'}</a>
         </Popconfirm>,
-        <a onClick={() => {}}>广播</a>,
+        <a onClick={() => {
+          handleModalBroadVisible(true)
+          handleIds([item.key])
+        }}>广播</a>,
       ],
     },
   ];
   const rowSelection = {
-    onChange(selectedRowKeys, selectedRows) {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    onChange(selectedRowKeys: any) {
       handleSelectedRowKeys(selectedRowKeys);
+      handleIds(selectedRowKeys)
     },
     // onSelect(record, selected, selectedRows) {
     //   console.log(record, selected, selectedRows);
@@ -138,6 +150,7 @@ const TableList: React.FC = () => {
     //   console.log(selected, selectedRows, changeRows);
     // },
   };
+
   return (
     <PageContainer>
       <ProTable
@@ -157,27 +170,38 @@ const TableList: React.FC = () => {
           // >
           //   <PlusOutlined /> 新建
           // </Button>,
-          selectedRowKeys && (
+          rowKeys.length ? (
             <Button
               type="primary"
               key="primary"
               onClick={() => {
-                handleModalVisible(true);
+                console.log(rowKeys);
+                handleModalBroadVisible(true);
               }}
             >
               批量广播
             </Button>
-          ),
+          ) : null,
         ]}
         request={(params) => queryRule({ ...params })}
         columns={columns}
       ></ProTable>
-      <Detail
+      {broadVisible ? <Broadcast
+        onCancel={() => {
+          handleModalBroadVisible(false);
+        }}
+        onSubmit={(values: any) => {
+          handleSubmit(values)
+        }}
+        id={ids}
+        modalVisible={broadVisible}
+      /> : null}
+      {visible ? <Detail
         onCancel={() => {
           handleModalVisible(false);
         }}
         modalVisible={visible}
-      />
+      /> : null}
     </PageContainer>
   );
 };
