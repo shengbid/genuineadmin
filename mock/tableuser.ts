@@ -51,7 +51,23 @@ function getRule(req: Request, res: Response, u: string) {
 
   return res.json(result);
 }
+// function getFile(req: Request, res: Response, u: string) {
+//   let realUrl = u;
+//   if (!realUrl || Object.prototype.toString.call(realUrl) !== '[object String]') {
+//     realUrl = req.url;
+//   }
+  
+//   const result = {
+//       uid: Math.floor(Math.random()*20),
+//       name: 'image.png',
+//       status: 'done',
+//       url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+//   };
+
+//   return res.json(result);
+// }
 
 export default {
   'GET /api/query/user/list': getRule,
+  // 'POST /api/upload': getFile,
 };

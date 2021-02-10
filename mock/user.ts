@@ -162,4 +162,12 @@ export default {
   },
 
   'GET  /api/login/captcha': getFakeCaptcha,
+  'POST /api/upload': (req: Request, res: Response) => {
+    res.send({ status: 'ok', file: {
+      uid: Math.floor(Math.random()*20),
+      name: 'image.png',
+      status: 'done',
+      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+  } });
+  },
 };

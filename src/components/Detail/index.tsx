@@ -15,6 +15,7 @@ const Detail: React.FC<UpdateFormProps> = (props) => {
       width={840}
       bodyStyle={{ padding: '30px' }}
       destroyOnClose
+      maskClosable={false}
       title="详情"
       visible={props.modalVisible}
       footer={null}

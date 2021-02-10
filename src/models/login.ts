@@ -37,7 +37,7 @@ export type LoginModelType = {
     logout: Effect;
   };
   reducers: {
-    saveCurrentUser: Reducer<UserModelState>;
+    saveCurrentUser: Reducer<StateType>;
     changeLoginStatus: Reducer<StateType>;
   };
 };

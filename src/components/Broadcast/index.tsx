@@ -59,6 +59,7 @@ const Detail: React.FC<UpdateFormProps> = (props) => {
       destroyOnClose
       title="留言"
       visible={props.modalVisible}
+      maskClosable={false}
       // footer={null}
       onCancel={() => {
         props.onCancel();
