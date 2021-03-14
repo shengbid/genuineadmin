@@ -49,19 +49,27 @@ const UserModel: UserModelType = {
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryCurrent);
+      // const response = yield call(queryCurrent);
+      let d = localStorage.getItem('currentUser')
+      if (d) {
+        d = JSON.parse(d)
+      }
       yield put({
         type: 'saveCurrentUser',
-        payload: response,
+        payload: d,
       });
     },
   },
 
   reducers: {
     saveCurrentUser(state, action) {
+      let d = localStorage.getItem('currentUser')
+      if (d) {
+        d = JSON.parse(d)
+      }
       return {
         ...state,
-        currentUser: action.payload || {},
+        currentUser: action.payload || d,
       };
     },
     changeNotifyCount(

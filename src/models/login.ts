@@ -2,7 +2,7 @@ import { stringify } from 'querystring';
 import type { Reducer, Effect } from 'umi';
 import { history } from 'umi';
 
-import { fakeAccountLogin } from '@/services/login';
+import { fakeAccountLogin, getRegister } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
@@ -51,36 +51,51 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
-      // Login successfully
-      if (response.status === 'ok') {
-        const urlParams = new URL(window.location.href);
-        const params = getPageQuery();
-        message.success('🎉 🎉 🎉  登录成功！');
-        const res = yield call(queryCurrent);
-        yield put({
-          type: 'saveCurrentUser',
-          payload: res,
-        });
-        localStorage.setItem('currentUser', JSON.stringify(res))
-        let { redirect } = params as { redirect: string };
-        if (redirect) {
-          const redirectUrlParams = new URL(redirect);
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
-            if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1);
-            }
-          } else {
-            window.location.href = '/';
-            return;
-          }
+      if (payload.type === "mobile") {
+        const response = yield call(getRegister, payload);
+        if (response && response.data) {
+          response.data.currentAuthority = 'admin'
         }
-        history.replace(redirect || '/');
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response.data,
+        });
+        
+      } else {
+        const response = yield call(fakeAccountLogin, payload);
+        if (response && response.data) {
+          response.data.currentAuthority = 'admin'
+        }
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response.data,
+        });
+        // Login successfully
+        if (response.code === 200) {
+          const urlParams = new URL(window.location.href);
+          const params = getPageQuery();
+          message.success('🎉 🎉 🎉  登录成功！');
+          // const res = yield call(queryCurrent);
+          yield put({
+            type: 'saveCurrentUser',
+            payload: response.data,
+          });
+          localStorage.setItem('currentUser', JSON.stringify(response.data))
+          let { redirect } = params as { redirect: string };
+          if (redirect) {
+            const redirectUrlParams = new URL(redirect);
+            if (redirectUrlParams.origin === urlParams.origin) {
+              redirect = redirect.substr(urlParams.origin.length);
+              if (redirect.match(/^\/.*#/)) {
+                redirect = redirect.substr(redirect.indexOf('#') + 1);
+              }
+            } else {
+              window.location.href = '/';
+              return;
+            }
+          }
+          history.replace(redirect || '/');
+        }
       }
     },
 
@@ -101,12 +116,14 @@ const Model: LoginModelType = {
 
   reducers: {
     saveCurrentUser(state, action) {
+      console.log(action.payload)
       return {
         ...state,
         currentUser: action.payload || {},
       };
     },
     changeLoginStatus(state, { payload }) {
+      console.log(6, state, payload)
       setAuthority(payload.currentAuthority);
       return {
         ...state,
