@@ -4,6 +4,7 @@ export type LoginParamsType = {
   userName?: string;
   password?: string;
   mobile?: string;
+  userAccount?: string;
   captcha?: string;
   type?: number | string;
   code?: number | string;
@@ -27,6 +28,15 @@ export async function getRegister(params: LoginParamsType) {
       email: params.mobile,
       password: params.password,
       code: params.captcha
+    },
+  });
+}
+// 退出登录
+export async function logout(params: LoginParamsType) {
+  return request('/gsh/logOut', {
+    method: 'POST',
+    data: {
+      userAccount: params.userAccount,
     },
   });
 }
