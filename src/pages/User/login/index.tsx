@@ -17,7 +17,7 @@ import { getPageQuery } from '@/utils/utils';
 import type { StateType } from '@/models/login';
 import type { LoginParamsType } from '@/services/login';
 import type { ConnectState } from '@/models/connect';
-import { fakeAccountLogin, getRegister } from '@/services/login';
+import { getRegister } from '@/services/login';
 
 import styles from './index.less';
 
@@ -46,14 +46,23 @@ const Login: React.FC<LoginProps> = (props) => {
   const [type, setType] = useState<string>('account');
   const intl = useIntl();
 
-  const handleSubmit = (values: LoginParamsType) => {
+  const handleSubmit = async (values: LoginParamsType) => {
     console.log(888, type)
+    if (type === "mobile") {
+      const response = await getRegister({...values})
+      if (response && response.data) {
+        message.success('🎉 🎉 🎉  注册成功！');
+        setType('account')
+      }
+      
+    } else {
+      const { dispatch } = props;
+      dispatch({
+        type: 'login/login',
+        payload: { ...values, type },
+      });
+    }
     
-    const { dispatch } = props;
-    dispatch({
-      type: 'login/login',
-      payload: { ...values, type },
-    });
   };
   return (
     <div className={styles.main}>
@@ -98,7 +107,7 @@ const Login: React.FC<LoginProps> = (props) => {
         {type === 'account' && (
           <>
             <ProFormText
-              name="userName"
+              name="mobile"
               fieldProps={{
                 size: 'large',
                 prefix: <UserOutlined className={styles.prefixIcon} />,

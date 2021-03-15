@@ -15,7 +15,7 @@ export async function fakeAccountLogin(params: LoginParamsType) {
   return request('/TGshUser/login', {
     method: 'POST',
     data: {
-      userAccount: params.userName,
+      userAccount: params.mobile,
       userPwd: params.password
     },
   });
