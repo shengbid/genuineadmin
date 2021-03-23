@@ -6,7 +6,6 @@ import { fakeAccountLogin, getRegister } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
-import { queryCurrent } from '@/services/user';
 
 export type CurrentUser = {
   avatar?: string;
@@ -65,6 +64,7 @@ const Model: LoginModelType = {
         const response = yield call(fakeAccountLogin, payload);
         if (response && response.data) {
           response.data.currentAuthority = 'admin'
+          // response.data.status = 'ok'
         }
         yield put({
           type: 'changeLoginStatus',
@@ -116,14 +116,13 @@ const Model: LoginModelType = {
 
   reducers: {
     saveCurrentUser(state, action) {
-      console.log(action.payload)
       return {
         ...state,
         currentUser: action.payload || {},
       };
     },
     changeLoginStatus(state, { payload }) {
-      console.log(6, state, payload)
+      console.log(8, state, payload)
       setAuthority(payload.currentAuthority);
       return {
         ...state,

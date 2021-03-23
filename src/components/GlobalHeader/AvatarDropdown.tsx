@@ -73,11 +73,11 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
         </Menu.Item>
       </Menu>
     );
-    return currentUser && currentUser.email ? (
+    return currentUser && currentUser.account ? (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
           <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-          <span className={`${styles.name} anticon`}>{currentUser.email}</span>
+          <span className={`${styles.name} anticon`}>{currentUser.account}</span>
         </span>
       </HeaderDropdown>
     ) : (

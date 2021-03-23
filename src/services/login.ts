@@ -11,8 +11,7 @@ export type LoginParamsType = {
 };
 
 export async function fakeAccountLogin(params: LoginParamsType) {
-  // return request('/TManagement/login', {
-  return request('/TGshUser/login', {
+  return request('/TManagement/login', {
     method: 'POST',
     data: {
       userAccount: params.mobile,

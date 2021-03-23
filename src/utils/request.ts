@@ -46,33 +46,33 @@ const errorHandler = (error: any) => {
 const request = extend({
   prefix: '/api',
   headers: {
-    "token": getToken()
+    "user_token_back": getToken()
   },
   getResponse: true,
   // errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
 });
 
-// request.interceptors.request.use(
-//   async (url: any, options: any) => {
-//     if (
-//       options.method === 'post' ||
-//       options.method === 'put' ||
-//       options.method === 'delete' ||
-//       options.method === 'get'
-//     ) {
-//       const headers = {
-//         'Content-Type': 'application/json',
-//         Accept: 'application/json',
-//         token: getToken()
-//       };
-//       return {
-//         url,
-//         options: { ...options, headers },
-//       };
-//     }
-//   }
-// )
+request.interceptors.request.use(
+  (url: any, options: any) => {
+    if (
+      options.method === 'post' ||
+      options.method === 'put' ||
+      options.method === 'delete' ||
+      options.method === 'get'
+    ) {
+      const headers = {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'user_token_back': getToken()
+      };
+      return {
+        url,
+        options: { ...options, headers },
+      };
+    }
+  }
+)
 request.interceptors.response.use(
   async (response: any) => {
     const res = await response.clone().json();
