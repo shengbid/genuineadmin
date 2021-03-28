@@ -76,7 +76,6 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   async (response: any) => {
     const res = await response.clone().json();
-    // console.log(res)
     if (res.code === 200 || res.code === 400) {
       return res
     }
@@ -94,7 +93,7 @@ request.interceptors.response.use(
       return res
     }
     notification.error({
-      message: res.msg,
+      message: res.msg || res.error,
     });
     return Promise.reject('error')
     
