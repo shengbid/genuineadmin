@@ -4,7 +4,7 @@ import ProTable from '@ant-design/pro-table';
 import React, { useState, useRef } from 'react';
 import type { ActionType } from '@ant-design/pro-table';
 import { Button, Popconfirm, message } from 'antd';
-import { queryList } from './service';
+import { queryList, setSugestionStatus } from './service';
 import Detail from '@/components/Detail';
 import Broadcast from '@/components/Broadcast';
 
@@ -23,41 +23,45 @@ const TableList: React.FC = () => {
   const [broadVisible, handleModalBroadVisible] = useState<boolean>(false);
   const [rowKeys, handleSelectedRowKeys] = useState([]);
   const [ids, handleIds] = useState<any[]>([]);
+  const [id, handleId] = useState<string | number>('');
 
-  const confirm = (text: string) => {
-    message.success(text);
+  const confirm = async(key: number | string) => {
+    await setSugestionStatus(key)
+    message.success('标记成功');
+    actionRef?.current.reload()
   };
 
   const handleSubmit = (values: any) => {
     console.log(values);
     message.success('留言成功!');
     handleModalBroadVisible(false);
+    actionRef?.current.reload()
   }
 
   const columns = [
     {
       title: '用户类型',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'type',
+      key: 'type',
+      valueEnum: {
+        0: {
+          text: '牛人',
+        },
+        1: {
+          text: '商户',
+        }
+      },
     },
     {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
       valueEnum: {
-        loading: {
-          text: '冻结',
-          status: 'error',
-        },
-        running: {
-          text: '正常',
-          status: 'Success',
-        },
-        online: {
-          text: '审批中',
+        0: {
+          text: '未处理',
           status: 'Processing',
         },
-        success: {
+        1: {
           text: '已处理',
           status: 'Success',
         },
@@ -65,15 +69,15 @@ const TableList: React.FC = () => {
     },
     {
       title: '反馈时间',
-      dataIndex: 'time',
-      key: 'time',
+      dataIndex: 'complateTime',
+      key: 'complateTime',
       valueType: 'date',
       hideInSearch: true,
     },
     {
       title: '建议内容',
-      dataIndex: 'desc',
-      key: 'desc',
+      dataIndex: 'remark',
+      key: 'remark',
       ellipsis: true,
       hideInSearch: true,
     },
@@ -86,20 +90,21 @@ const TableList: React.FC = () => {
           key="subscribeAlert"
           onClick={() => {
             handleModalVisible(true);
+            handleId(item.id)
           }}
         >
           详情
         </a>,
         <Popconfirm
           placement="bottomRight"
-          title={item.status === 'loading' ? '是否确定解冻?' : '是否确定冻结?'}
+          title={'是否确定标记为已处理?'}
           onConfirm={() => {
-            confirm(item.status === 'loading' ? '解冻成功!' : '冻结成功!');
+            confirm(item.id);
           }}
           okText="确定"
           cancelText="取消"
         >
-          <a>{item.status === 'running' ? '冻结' : '解冻'}</a>
+          <a>标记处理</a>
         </Popconfirm>,
         <a onClick={() => {
           handleModalBroadVisible(true)
@@ -160,6 +165,7 @@ const TableList: React.FC = () => {
         modalVisible={broadVisible}
       /> : null}
       {visible ? <Detail
+        id={id}
         onCancel={() => {
           handleModalVisible(false);
         }}
