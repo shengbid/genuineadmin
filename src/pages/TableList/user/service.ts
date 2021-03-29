@@ -8,3 +8,14 @@ export async function queryList(params: {current: number, pageSize: number}) {
     }
   })
 }
+
+export async function toFreeze(id: number, type: number) {
+  return request(`/gsh/freeze/${id}/${type}`, {
+    method: 'delete'
+  })
+}
+
+export async function getUserDetail(id: number) {
+  return request(`/gsh/gshUserDetail/${id}`, {
+  })
+}
