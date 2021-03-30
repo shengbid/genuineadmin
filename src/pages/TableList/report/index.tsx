@@ -4,7 +4,7 @@ import ProTable from '@ant-design/pro-table';
 import React, { useState, useRef } from 'react';
 import type { ActionType } from '@ant-design/pro-table';
 import { Button, Popconfirm, message } from 'antd';
-import { queryList } from './service';
+import { queryList, setSugestionStatus } from './service';
 import Detail from '@/components/Detail';
 import Broadcast from '@/components/Broadcast';
 
@@ -24,8 +24,10 @@ const TableList: React.FC = () => {
   const [rowKeys, handleSelectedRowKeys] = useState([]);
   const [ids, handleIds] = useState<any[]>([]);
 
-  const confirm = (text: string) => {
-    message.success(text);
+  const confirm = async(key: number | string) => {
+    await setSugestionStatus(key)
+    message.success('标记成功');
+    actionRef?.current.reload()
   };
 
   const handleSubmit = (values: any) => {
@@ -92,14 +94,14 @@ const TableList: React.FC = () => {
         </a>,
         <Popconfirm
           placement="bottomRight"
-          title={item.status === 'loading' ? '是否确定解冻?' : '是否确定冻结?'}
+          title={'是否确定标记为已处理?'}
           onConfirm={() => {
-            confirm(item.status === 'loading' ? '解冻成功!' : '冻结成功!');
+            confirm(item.id);
           }}
           okText="确定"
           cancelText="取消"
         >
-          <a>{item.status === 'running' ? '冻结' : '解冻'}</a>
+          {item.status === '0' ? <a>标记处理</a> : null}
         </Popconfirm>,
         <a onClick={() => {
           handleModalBroadVisible(true)
@@ -119,7 +121,7 @@ const TableList: React.FC = () => {
     <PageContainer>
       <ProTable
         actionRef={actionRef}
-        rowKey="key"
+        rowKey="id"
         search={{
           labelWidth: 120,
         }}
@@ -135,7 +137,7 @@ const TableList: React.FC = () => {
             >
               批量广播
             </Button>
-            <Button
+            {/* <Button
               type="primary"
               key="primary"
               onClick={() => {
@@ -143,7 +145,8 @@ const TableList: React.FC = () => {
               }}
             >
               批量标记
-            </Button></>
+            </Button> */}
+            </>
           ) : null,
         ]}
         request={(params) => queryRule({ ...params })}

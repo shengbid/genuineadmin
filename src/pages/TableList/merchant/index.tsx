@@ -16,7 +16,7 @@ import Broadcast from '@/components/Broadcast';
 // } & ProLayoutProps
 
 const queryRule = async (fieds: any) => {
-  const res = await queryList({ ...fieds });
+  const res = await queryList({ ...fieds, type: 1 });
   return {
     success: true,
     total: res.data.total,

@@ -9,7 +9,7 @@ import Detail from '@/components/Detail';
 import Broadcast from '@/components/Broadcast';
 
 const queryRule = async (fieds: any) => {
-  const res = await queryList({ ...fieds });
+  const res = await queryList({ ...fieds, type: 0 });
   return {
     success: true,
     total: res.data.total,

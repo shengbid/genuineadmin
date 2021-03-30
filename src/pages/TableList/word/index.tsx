@@ -12,8 +12,8 @@ const queryRule = async (fieds: any) => {
   const res = await queryList({ ...fieds })
   return {
     success: true,
-    total: res.total,
-    data: res.data
+    total: res.data.total,
+    data: res.data.records
   }
 }
 const TableList: React.FC = () => {

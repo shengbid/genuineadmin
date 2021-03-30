@@ -34,34 +34,37 @@ const TableList: React.FC = () => {
   const columns = [
     {
       title: '广告位置',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'coordinate',
+      key: 'coordinate',
     },
     {
       title: '图片尺寸',
-      dataIndex: 'wechart',
-      key: 'wechart',
+      dataIndex: 'imageSize',
+      key: 'imageSize',
       hideInSearch: true,
     },
     {
       title: '广告跳转链接',
-      dataIndex: 'desc',
-      key: 'desc',
+      dataIndex: 'aLine',
+      key: 'aLine',
       ellipsis: true,
     },
     {
       title: '广告预览',
-      dataIndex: 'phone',
-      key: 'phone',
+      dataIndex: 'image',
+      key: 'image',
       ellipsis: true,
       hideInSearch: true,
     },
     {
       title: '有效时间',
-      dataIndex: 'time',
-      key: 'time',
-      valueType: 'date',
+      dataIndex: 'beginTime',
+      key: 'beginTime',
+      valueType: 'dateRange',
       hideInSearch: true,
+      render: (_, item) => (
+        <span>{item.beginTime} - {item.overTime}</span>
+      )
     },
     {
       title: '操作',
@@ -98,7 +101,7 @@ const TableList: React.FC = () => {
     <PageContainer>
       <ProTable
         actionRef={actionRef}
-        rowKey="key"
+        rowKey="id"
         search={{
           labelWidth: 120,
         }}

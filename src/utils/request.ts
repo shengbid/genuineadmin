@@ -25,7 +25,6 @@ import { getToken } from './common'
 /** 异常处理程序 */
 const errorHandler = (error: any) => {
   const { response } = error;
-  console.log(5,error)
   if (response && response.status) {
     const errorText = response.msg;
 
@@ -95,7 +94,7 @@ request.interceptors.response.use(
     notification.error({
       message: res.msg || res.error,
     });
-    return Promise.reject('error')
+    return res
     
   },
   error => {

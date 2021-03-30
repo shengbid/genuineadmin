@@ -104,7 +104,7 @@ const TableList: React.FC = () => {
           okText="确定"
           cancelText="取消"
         >
-          <a>标记处理</a>
+          {item.status === '0' ? <a>标记处理</a> : null}
         </Popconfirm>,
         <a onClick={() => {
           handleModalBroadVisible(true)
@@ -124,7 +124,7 @@ const TableList: React.FC = () => {
     <PageContainer>
       <ProTable
         actionRef={actionRef}
-        rowKey="key"
+        rowKey="id"
         search={{
           labelWidth: 120,
         }}
@@ -140,7 +140,7 @@ const TableList: React.FC = () => {
             >
               批量广播
             </Button>
-            <Button
+            {/* <Button
               type="primary"
               key="primary"
               onClick={() => {
@@ -148,7 +148,8 @@ const TableList: React.FC = () => {
               }}
             >
               批量标记
-            </Button></>
+            </Button> */}
+            </>
           ) : null,
         ]}
         request={(params) => queryRule({ ...params })}
